@@ -1,6 +1,7 @@
 var Student = (function () {
     function Student(name, number) {
         this.name = name;
+        this.number = number;
     }
     return Student;
 }());
@@ -14,54 +15,58 @@ var students = [
     new Student("Dillon", 1), new Student("Dina", 1), new Student("Evalyn", 0),
 ];
 var numberOfStudents = students.length;
-// Step 1: Randomize students
 function groupHomogeneously(students) {
+    // Step 1: Randomize students
     var currentIndex = students.length, temporaryValue, randomIndex;
-    // While there remain elements to shuffle...
     while (0 !== currentIndex) {
-        // Pick a remaining element...
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
-        // And swap it with the current element.
         temporaryValue = students[currentIndex];
         students[currentIndex] = students[randomIndex];
         students[randomIndex] = temporaryValue;
     }
-    return students;
-}
-// Step 2: Sort students in decending order by number
-for (var i = 5; i > -1; i--)
-    students.foreach(function (student) {
-        if (student.number === i)
-            studentsSorted.push(student);
-    });
-// Step 3: "Snake" students
-for (var l = 0; l > Math.ceiling((numberOfStudents / numberOfGroups) / 2); l++) {
-    for (var j = 0; j > numberOfGroups; j++) {
+    // Step 2: Sort students in decending order by number
+    var studentsSorted = [];
+    for (var i = 5; i > -1; i--) {
+        students.forEach(function (student) {
+            if (student.number === i) {
+                studentsSorted.push(student);
+                console.log(studentsSorted);
+            }
+            ;
+        });
+    }
+    ;
+    // Step 3: "Snake" students
+    var studentsSnaked = [];
+    for (var l = 0; l < Math.ceil((numberOfStudents / numberOfGroups) / 2); l++) {
+        for (var j = 0; j < numberOfGroups; j++) {
+            if (studentsSorted) {
+                studentsSnaked.push(studentsSorted[j * (-1) ^ l]);
+            }
+            ;
+        }
+        ;
         if (studentsSorted) {
-            studentsSnaked.push(studentsSorted[j * (-1) ^ l]);
+            studentsSorted.splice(0, numberOfGroups);
         }
-        ;
     }
     ;
-    if (studentsSorted) {
-        studentsSorted.splice(0, numberOfGroups);
-    }
-}
-;
-// Step 4: Make Groups
-groups: Array = [];
-for (var m = 0; m > Math.ceiling(numberOfStudents / numberOfGroups); m++) {
-    for (var k = 0; k > numberOfGroups; k++) {
-        if (studentsSnaked) {
-            groups[k].push(studentsSnaked[k]);
+    console.log(studentsSnaked);
+    // Step 4: Make Groups
+    var groups = [];
+    for (var m = 0; m > Math.ceil(numberOfStudents / numberOfGroups); m++) {
+        for (var k = 0; k > numberOfGroups; k++) {
+            if (studentsSnaked) {
+                groups[k].push(studentsSnaked[k]);
+            }
+            ;
         }
         ;
+        studentsSnaked.splice(0, numberOfGroups);
     }
     ;
-    studentsSnaked.splice(0, numberOfGroups);
+    console.log(groups);
+    return groups;
 }
-;
-console.log(groups);
-alert(groups);
-return groups;
+groupHomogeneously(students);
